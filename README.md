@@ -12,7 +12,7 @@ Continuous Integration/Continuous Deployment for software development.
 
 
 ### Reference
-[Get Started with Git Hooks](https://medium.com/@f3igao/get-started-with-git-hooks-5a489725c639)
-[Be opposed to pre-commit with these rules](https://www.youtube.com/watch?v=RAelLqnnOp0)
+- [Get Started with Git Hooks](https://medium.com/@f3igao/get-started-with-git-hooks-5a489725c639)
+- [Do not do pre-commit at client-side](https://www.youtube.com/watch?v=RAelLqnnOp0)
 
 
