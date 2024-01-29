@@ -2,7 +2,7 @@
 
 ## [Conceptual overview](https://www.atlassian.com/git/tutorials/git-hooks)
 
-- **Client-Side:**  
+- **Client-Side: scripts paths:** `./.git/hooks`
   **_applypatch-msg.sample_**  
   **_pre-push.sample_**  
   **_commit-msg.sample_**  
@@ -13,6 +13,6 @@
   **_update.sample_**  
   **_pre-commit.sample_**
 
-- **Server-Side**  
+- **[Server-Side (Bitbucket Setting)](https://confluence.atlassian.com/bitbucketserverkb/how-to-create-a-simple-hook-in-bitbucket-data-center-and-server-779171711.html)**  
   **_pre-receive_**  
   **_post-receive_**
