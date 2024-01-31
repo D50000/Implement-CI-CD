@@ -8,6 +8,7 @@ Continuous Integration/Continuous Deployment for software development.
   - **client-side: local hooks**, which are prompted by events on the local repository, such as when a developer commits or merges code.
   - **server-side: remote hooks**, which are run on the network hosting the repository, and they are prompted by events such as receiving pushes.
 - **Gitbucket**
+  - **webhooks:** Push notification or trigger other task as CI/CD.
 - **Jenkis**
 
 ## Work Flow
@@ -17,3 +18,4 @@ Continuous Integration/Continuous Deployment for software development.
 - [Learn Git](https://www.atlassian.com/git/glossary#commands)
 - [Get Started with Git Hooks](https://medium.com/@f3igao/get-started-with-git-hooks-5a489725c639)
 - [Do not do pre-commit at client-side](https://www.youtube.com/watch?v=RAelLqnnOp0)
+- [Workflow strategies](https://confluence.atlassian.com/bitbucketserver/workflow-strategies-776639944.html)
