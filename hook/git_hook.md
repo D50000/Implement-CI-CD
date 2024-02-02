@@ -2,7 +2,7 @@
 
 ## [Conceptual overview](https://www.atlassian.com/git/tutorials/git-hooks)
 
-- **Client-Side: scripts paths:** `./.git/hooks`
+- **Client-Side: scripts paths:** `project/.git/hooks`
   **_applypatch-msg.sample_**  
   **_pre-push.sample_**  
   **_commit-msg.sample_**  
