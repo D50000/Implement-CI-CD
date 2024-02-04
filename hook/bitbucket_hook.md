@@ -6,8 +6,12 @@
 2. [Creating the hook](https://marketplace.atlassian.com/apps/1211631/external-hooks-by-reconquest?hosting=server&tab=overview)
 
 ## Primary Approaches
-versions below 8.0:
-Created directly on the file system
+versions below 8.0:  
+**Created directly on the file system**
+1. Navigate to a repository in a bitbucket instance:
+2. Navigate to the directory of  pre-receive or post-receive hooks: 
+3. Create a file in the pre or post-receive directory
+Troubleshooting
 
 version 8.0 and above:  
-No longer support creating hook scripts. Just use [REST API](https://developer.atlassian.com/server/bitbucket/rest/v810/api-group-system-maintenance/#api-api-latest-hook-scripts-post).
+No longer support creating hook scripts. Just use [**REST API**](https://developer.atlassian.com/server/bitbucket/rest/v810/api-group-system-maintenance/#api-api-latest-hook-scripts-post).
