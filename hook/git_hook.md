@@ -15,4 +15,6 @@
 
 - **[Server-Side (Bitbucket Setting)](https://confluence.atlassian.com/bitbucketserverkb/how-to-create-a-simple-hook-in-bitbucket-data-center-and-server-779171711.html)**  
   **_pre-receive_**  
-  **_post-receive_**
+  Before branch push, but do not fire when a pull-request is merged.
+  **_post-receive_**  
+  After branch pushed. ex: notify a build server.
