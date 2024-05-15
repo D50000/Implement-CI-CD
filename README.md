@@ -3,27 +3,35 @@
 Continuous Integration/Continuous Deployment for software development.
 
 **Typical Work Flow:**  
+```shell
 +--------------------------------------+
-|            Code Repository           |
+|          Code Repository (Git)       |
 +--------------------------------------+
-             |         |
-        Trigger    Commit/Push
-             |         |
+                  ↓↓
+             Commit/Push
+                  ↓↓
+            Webhook Trigger
+                  ↓↓
 +--------------------------------------+
-|           CI Server (Jenkins)         |
+|         CI Server (Jenkins)          |
 +--------------------------------------+
-             |         |
-     Build/Test    Commit Status
-             |         |
+                  ↓↓
+              Build/Test
+                  ↓↓
+            Archive Artifact
+                  ↓↓
 +--------------------------------------+
-|         Artifact Repository           |
+|        Artifact Repository (Git)     |
 +--------------------------------------+
-             |         |
-   Store Build Artifacts    Deploy
-             |         |
+                  ↓↓
+          Trigger CD process
+                  ↓↓
+                Deploy
+                  ↓↓
 +--------------------------------------+
-|            Production Environment    |
+|       Production Environment         |
 +--------------------------------------+
+```
 
 ## Integrate with
 
