@@ -2,6 +2,29 @@
 
 Continuous Integration/Continuous Deployment for software development.
 
+**Typical Work Flow:**  
++--------------------------------------+
+|            Code Repository           |
++--------------------------------------+
+             |         |
+        Trigger    Commit/Push
+             |         |
++--------------------------------------+
+|           CI Server (Jenkins)         |
++--------------------------------------+
+             |         |
+     Build/Test    Commit Status
+             |         |
++--------------------------------------+
+|         Artifact Repository           |
++--------------------------------------+
+             |         |
+   Store Build Artifacts    Deploy
+             |         |
++--------------------------------------+
+|            Production Environment    |
++--------------------------------------+
+
 ## Integrate with
 
 - **Git Hook:** _Major benefits of using Git hooks include encouraging a commit policy, automating development workflow, and implementing continuous integration._
@@ -11,7 +34,6 @@ Continuous Integration/Continuous Deployment for software development.
   - **webhooks:** Push notification or trigger other task as CI/CD.
 - **Jenkis**
 
-## Work Flow
 
 ### Reference
 
