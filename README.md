@@ -1,6 +1,6 @@
 # Implement CI/CD
 
-Continuous Integration/Continuous Deployment for software development.
+Continuous Integration/Continuous Deployment for software development.The main idea is to enhance the developer's coding experience and streamline the software development process. 
 
 **Typical Work Flow:**  
 ```shell
@@ -16,7 +16,7 @@ Continuous Integration/Continuous Deployment for software development.
 |         CI Server (Jenkins)          |
 +--------------------------------------+
                   ↓↓
-              Build/Test
+              Build/Test (pipeline)
                   ↓↓
             Archive Artifact
                   ↓↓
@@ -35,12 +35,15 @@ Continuous Integration/Continuous Deployment for software development.
 
 ## Integrate with
 
+- **Bitbucket Repository**
+  - Store the source code and artifacts.
+  - **webhooks:** Trigger by commit and push notification or trigger other task as CI/CD. ([Bitbucket setup detail](https://github.com/D50000/Implement-CI-CD/blob/main/hook/bitbucket_hook.md))
 - **Git Hook:** _Major benefits of using Git hooks include encouraging a commit policy, automating development workflow, and implementing continuous integration._
   - **client-side: local hooks**, which are prompted by events on the local repository, such as when a developer commits or merges code.
   - **server-side: remote hooks**, which are run on the network hosting the repository, and they are prompted by events such as receiving pushes.
-- **Bitbucket**
-  - **webhooks:** Push notification or trigger other task as CI/CD.
 - **Jenkis**
+  - Standardization and consistency in CI/CD progress.
+  - Monitor and archive the execute status.
 
 
 ### Reference
