@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building...'
+                // 添加构建步骤
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing...'
+                // 添加测试步骤
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying...'
+                // 添加部署步骤
+            }
+        }
+    }
+}
