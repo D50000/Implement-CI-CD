@@ -1,32 +1,105 @@
 pipeline {
-    agent any
+    agent {
+        label 'your-agent-label' // Replace with your Jenkins agent label
+    }
+
+    environment {
+        GITHUB_CREDENTIALS = credentials('github-credentials-id') // Replace with your GitHub credentials ID in Jenkins
+    }
+
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'The branch to build')
+        choice(name: 'ENVIRONMENT', choices: ['sit', 'uat', 'prod'], description: 'Build environment')
+    }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    // Checkout the source code from GitHub
+                    checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: "*/${params.BRANCH_NAME}"]],
+                        doGenerateSubmoduleConfigurations: false,
+                        extensions: [],
+                        submoduleCfg: [],
+                        userRemoteConfigs: [[
+                            credentialsId: GITHUB_CREDENTIALS,
+                            url: 'https://github.com/your-repo-url.git' // Replace with your GitHub repository URL
+                        ]]
+                    ])
+                }
             }
         }
 
-        stage('Build') {
+        stage('Build Frontend') {
             steps {
-                echo 'Building...'
-                // 添加构建步骤
+                script {
+                    dir('frontend') {
+                        // Build frontend (assumes npm is used)
+                        sh 'npm install'
+                        sh 'npm run build'
+                    }
+                }
             }
         }
 
-        stage('Test') {
+        stage('Build Backend') {
             steps {
-                echo 'Testing...'
-                // 添加测试步骤
+                script {
+                    dir('backend') {
+                        // Build backend (assumes Maven is used)
+                        sh 'mvn clean install'
+                    }
+                }
             }
         }
 
-        stage('Deploy') {
+        stage('Push to Artifact Repo') {
             steps {
-                echo 'Deploying...'
-                // 添加部署步骤
+                script {
+                    // Assuming you have already cloned the artifact repository
+                    dir('artifact-repo') {
+                        sh """
+                        git checkout -b ${params.ENVIRONMENT}-${params.BRANCH_NAME}
+                        cp -r ../frontend/dist ./frontend-dist
+                        cp -r ../backend/target ./backend-target
+                        git add .
+                        git commit -m "Adding built artifacts for ${params.ENVIRONMENT}"
+                        git push origin ${params.ENVIRONMENT}-${params.BRANCH_NAME}
+                        """
+                    }
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            mail to: 'success@example.com',
+                 subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: """
+                 The build was successful.
+                 Job: ${env.JOB_NAME}
+                 Build Number: ${env.BUILD_NUMBER}
+                 Branch: ${params.BRANCH_NAME}
+                 Environment: ${params.ENVIRONMENT}
+
+                 Check the build logs for more details.
+                 """
+        }
+        failure {
+            mail to: 'failure@example.com',
+                 subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: """
+                 The build failed.
+                 Job: ${env.JOB_NAME}
+                 Build Number: ${env.BUILD_NUMBER}
+                 Branch: ${params.BRANCH_NAME}
+                 Environment: ${params.ENVIRONMENT}
+
+                 Check the build logs for more details.
+                 """
         }
     }
 }
