@@ -8,12 +8,13 @@ pipeline {
     }
 
     parameters {
-        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'The branch to build')
-        choice(name: 'ENVIRONMENT', choices: ['sit', 'uat', 'prod'], description: 'Build environment')
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'The branch to build') // Free inpust text box.
+        choice(name: 'ENVIRONMENT', defaultValue: 'sit', choices: ['sit', 'uat', 'prod'], description: 'Build environment') // Drop down option.
     }
 
+    // Pipeline work flows
     stages {
-        stage('Checkout') {
+        stage('[1/4] Checkout') {
             steps {
                 script {
                     // Checkout the source code from GitHub
@@ -32,7 +33,7 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
+        stage('[2/4] Build Frontend') {
             steps {
                 script {
                     dir('frontend') {
@@ -44,7 +45,7 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
+        stage('[3/4] Build Backend') {
             steps {
                 script {
                     dir('backend') {
@@ -55,11 +56,12 @@ pipeline {
             }
         }
 
-        stage('Push to Artifact Repo') {
+        stage('[4/4] Push to Artifact Repo') {
             steps {
                 script {
                     // Assuming you have already cloned the artifact repository
                     dir('artifact-repo') {
+                        // Multiple sh script command
                         sh """
                         git checkout -b ${params.ENVIRONMENT}-${params.BRANCH_NAME}
                         cp -r ../frontend/dist ./frontend-dist
@@ -74,32 +76,55 @@ pipeline {
         }
     }
 
+    // Whatever the each stage work or not, it finally will run post
     post {
         success {
-            mail to: 'success@example.com',
-                 subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: """
-                 The build was successful.
-                 Job: ${env.JOB_NAME}
-                 Build Number: ${env.BUILD_NUMBER}
-                 Branch: ${params.BRANCH_NAME}
-                 Environment: ${params.ENVIRONMENT}
-
-                 Check the build logs for more details.
-                 """
+            script {
+                emailext(
+                    to: 'success@example.com',
+                    subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                    <html>
+                    <body>
+                        <h2 style="color: green;">Build Successful</h2>
+                        <p>The build was successful.</p>
+                        <ul>
+                            <li><strong>Job:</strong> ${env.JOB_NAME}</li>
+                            <li><strong>Build Number:</strong> ${env.BUILD_NUMBER}</li>
+                            <li><strong>Branch:</strong> ${params.BRANCH_NAME}</li>
+                            <li><strong>Environment:</strong> ${params.ENVIRONMENT}</li>
+                        </ul>
+                        <p>Check the build logs for more details.</p>
+                    </body>
+                    </html>
+                    """,
+                    mimeType: 'text/html'
+                )
+            }
         }
         failure {
-            mail to: 'failure@example.com',
-                 subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: """
-                 The build failed.
-                 Job: ${env.JOB_NAME}
-                 Build Number: ${env.BUILD_NUMBER}
-                 Branch: ${params.BRANCH_NAME}
-                 Environment: ${params.ENVIRONMENT}
-
-                 Check the build logs for more details.
-                 """
+            script {
+                emailext(
+                    to: 'failure@example.com',
+                    subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                    <html>
+                    <body>
+                        <h2 style="color: red;">Build Failed</h2>
+                        <p>The build failed.</p>
+                        <ul>
+                            <li><strong>Job:</strong> ${env.JOB_NAME}</li>
+                            <li><strong>Build Number:</strong> ${env.BUILD_NUMBER}</li>
+                            <li><strong>Branch:</strong> ${params.BRANCH_NAME}</li>
+                            <li><strong>Environment:</strong> ${params.ENVIRONMENT}</li>
+                        </ul>
+                        <p>Check the build logs for more details.</p>
+                    </body>
+                    </html>
+                    """,
+                    mimeType: 'text/html'
+                )
+            }
         }
     }
 }
