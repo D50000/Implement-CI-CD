@@ -14,7 +14,7 @@ pipeline {
 
     // Pipeline work flows
     stages {
-        stage('[1/4] Checkout') {
+        stage('[1/5] Checkout') {
             steps {
                 script {
                     // Checkout the source code from GitHub
@@ -33,7 +33,7 @@ pipeline {
             }
         }
 
-        stage('[2/4] Build Frontend') {
+        stage('[2/5] Build Frontend') {
             steps {
                 script {
                     dir('frontend') {
@@ -45,7 +45,7 @@ pipeline {
             }
         }
 
-        stage('[3/4] Build Backend') {
+        stage('[3/5] Build Backend') {
             steps {
                 script {
                     dir('backend') {
@@ -56,7 +56,16 @@ pipeline {
             }
         }
 
-        stage('[4/4] Push to Artifact Repo') {
+        stage('[4/5] Run The Test') {
+            steps {
+                script {
+                    // Import and load the test pipeline script
+                    load 'jenkins/Jenkinsfile.test'
+                }
+            }
+        }
+
+        stage('[5/5] Push to Artifact Repo') {
             steps {
                 script {
                     // Assuming you have already cloned the artifact repository
