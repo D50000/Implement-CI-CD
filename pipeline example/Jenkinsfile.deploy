@@ -11,9 +11,6 @@ pipeline {
         FRONTEND_BACKUP_DIR = '/var/backups/frontend'
         BACKEND_BACKUP_DIR = '/var/backups/backend'
         BACKEND_JAR_NAME = 'your-backend-app.jar'
-        BACKEND_START_SCRIPT = '/var/www/backend/start-backend.sh'
-        FRONTEND_PROCESS_NAME = 'nginx' // Nginx service name
-        BACKEND_PROCESS_NAME = 'java'
     }
 
     stages {
@@ -36,15 +33,14 @@ pipeline {
                         BACKEND_SERVER,
                         BACKEND_APP_DIR,
                         BACKEND_BACKUP_DIR,
-                        BACKEND_JAR_NAME,
-                        BACKEND_START_SCRIPT,
-                        BACKEND_PROCESS_NAME
+                        BACKEND_JAR_NAME
                     )
                 }
             }
         }
     }
 
+    // Send email after deploy script finish.
     post {
         success {
             script {
@@ -93,24 +89,25 @@ pipeline {
     }
 }
 
+// Functioni definition place at bottom.
 def deployFrontendApp(server, appDir, backupDir) {
     sh """
     ssh ${server} 'mkdir -p ${backupDir}'
+    // ssh to the server and backup code to date time folder.
     ssh ${server} 'cp -r ${appDir} ${backupDir}/\$(date +%F-%T)'
-    ssh ${server} 'systemctl stop ${FRONTEND_PROCESS_NAME}'
     ssh ${server} 'rm -rf ${appDir}/*'
     scp -r dist/* ${server}:${appDir}/
-    ssh ${server} 'systemctl start ${FRONTEND_PROCESS_NAME}'
     """
 }
 
-def deployBackendApp(server, appDir, backupDir, jarName, startScript, processName) {
+def deployBackendApp(server, appDir, backupDir, jarName) {
     sh """
     ssh ${server} 'mkdir -p ${backupDir}'
     ssh ${server} 'cp -r ${appDir} ${backupDir}/\$(date +%F-%T)'
-    ssh ${server} 'pkill -f ${processName} || true'
+    // Find the service name to kill. ('true' is for avoiding failure if process not exist)
+    ssh ${server} 'pkill -f ${jarName} || true'
     ssh ${server} 'rm -rf ${appDir}/*'
     scp -r target/${jarName} ${server}:${appDir}/
-    ssh ${server} 'nohup ${startScript} &'
+    ssh ${server} 'nohup java -jar ${appDir}/${jarName} &'
     """
 }
