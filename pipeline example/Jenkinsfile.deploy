@@ -1,0 +1,116 @@
+pipeline {
+    agent {
+        label 'your-agent-label' // Replace with your Jenkins agent label
+    }
+
+    environment {
+        FRONTEND_SERVER = 'your-frontend-server'
+        BACKEND_SERVER = 'your-backend-server'
+        FRONTEND_APP_DIR = '/var/www/frontend'
+        BACKEND_APP_DIR = '/var/www/backend'
+        FRONTEND_BACKUP_DIR = '/var/backups/frontend'
+        BACKEND_BACKUP_DIR = '/var/backups/backend'
+        BACKEND_JAR_NAME = 'your-backend-app.jar'
+        BACKEND_START_SCRIPT = '/var/www/backend/start-backend.sh'
+        FRONTEND_PROCESS_NAME = 'nginx' // Nginx service name
+        BACKEND_PROCESS_NAME = 'java'
+    }
+
+    stages {
+        stage('Deploy Frontend') {
+            steps {
+                script {
+                    deployFrontendApp(
+                        FRONTEND_SERVER,
+                        FRONTEND_APP_DIR,
+                        FRONTEND_BACKUP_DIR
+                    )
+                }
+            }
+        }
+
+        stage('Deploy Backend') {
+            steps {
+                script {
+                    deployBackendApp(
+                        BACKEND_SERVER,
+                        BACKEND_APP_DIR,
+                        BACKEND_BACKUP_DIR,
+                        BACKEND_JAR_NAME,
+                        BACKEND_START_SCRIPT,
+                        BACKEND_PROCESS_NAME
+                    )
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                mail(
+                    to: 'success@example.com',
+                    subject: "Deployment Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                    <html>
+                    <body>
+                        <h2 style="color: green;">Deployment Successful</h2>
+                        <p>The deployment was successful.</p>
+                        <ul>
+                            <li><strong>Job:</strong> ${env.JOB_NAME}</li>
+                            <li><strong>Build Number:</strong> ${env.BUILD_NUMBER}</li>
+                        </ul>
+                        <p>Check the deployment logs for more details.</p>
+                    </body>
+                    </html>
+                    """,
+                    mimeType: 'text/html'
+                )
+            }
+        }
+        failure {
+            script {
+                mail(
+                    to: 'failure@example.com',
+                    subject: "Deployment Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: """
+                    <html>
+                    <body>
+                        <h2 style="color: red;">Deployment Failed</h2>
+                        <p>The deployment failed.</p>
+                        <ul>
+                            <li><strong>Job:</strong> ${env.JOB_NAME}</li>
+                            <li><strong>Build Number:</strong> ${env.BUILD_NUMBER}</li>
+                        </ul>
+                        <p>Check the deployment logs for more details.</p>
+                    </body>
+                    </html>
+                    """,
+                    mimeType: 'text/html'
+                )
+            }
+        }
+    }
+}
+
+def deployFrontendApp(server, appDir, backupDir) {
+    sh """
+    ssh ${server} 'mkdir -p ${backupDir}'
+    ssh ${server} 'cp -r ${appDir} ${backupDir}/\$(date +%F-%T)'
+    ssh ${server} 'systemctl stop ${FRONTEND_PROCESS_NAME}'
+    ssh ${server} 'rm -rf ${appDir}/*'
+    scp -r dist/* ${server}:${appDir}/
+    ssh ${server} 'systemctl start ${FRONTEND_PROCESS_NAME}'
+    """
+}
+
+def deployBackendApp(server, appDir, backupDir, jarName, startScript, processName) {
+    sh """
+    ssh ${server} 'mkdir -p ${backupDir}'
+    ssh ${server} 'cp -r ${appDir} ${backupDir}/\$(date +%F-%T)'
+    ssh ${server} 'pkill -f ${processName} || true'
+    ssh ${server} 'rm -rf ${appDir}/*'
+    scp -r target/${jarName} ${server}:${appDir}/
+    ssh ${server} 'nohup ${startScript} &'
+    """
+}
