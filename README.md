@@ -54,4 +54,4 @@ Continuous Integration/Continuous Deployment for software development.The main i
 - [Workflow strategies](https://confluence.atlassian.com/bitbucketserver/workflow-strategies-776639944.html)
 - [The essence of branch-based workflows](https://www.atlassian.com/blog/git/the-essence-of-branch-based-workflows)
 - [5 ways to make the most of Jira Software and Bitbucket](https://www.atlassian.com/blog/software-teams/5-jira-software-bitbucket-cloud-integration-tips)
-- [jenkins pipeline](https://www.jenkins.io/doc/book/pipeline/)
+- [Jenkins Pipeline](https://www.jenkins.io/doc/book/pipeline/)
