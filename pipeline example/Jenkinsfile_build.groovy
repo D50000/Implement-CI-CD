@@ -60,7 +60,7 @@ pipeline {
             steps {
                 script {
                     // Import and load the test pipeline script
-                    load 'jenkins/Jenkinsfile.test'
+                    load 'jenkins/Jenkinsfile_test.groovy'
                 }
             }
         }
