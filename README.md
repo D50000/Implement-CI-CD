@@ -44,6 +44,9 @@ Continuous Integration/Continuous Deployment for software development.The main i
 - **Jenkis**
   - Standardization and consistency in CI/CD progress.
   - Monitor and archive the execute status.
+- **Jira**
+  - Management the task progress and status.
+  - Publish release note after project merge. (Plugin: *Jira Automation* or *ScriptRunner*)
 
 
 ### Reference
@@ -55,3 +58,5 @@ Continuous Integration/Continuous Deployment for software development.The main i
 - [The essence of branch-based workflows](https://www.atlassian.com/blog/git/the-essence-of-branch-based-workflows)
 - [5 ways to make the most of Jira Software and Bitbucket](https://www.atlassian.com/blog/software-teams/5-jira-software-bitbucket-cloud-integration-tips)
 - [Jenkins Pipeline](https://www.jenkins.io/doc/book/pipeline/)
+- [Jira](https://www.atlassian.com/software/jira?&aceid=&adposition=&adgroup=141043469439&campaign=18445833028&creative=697046809358&device=c&keyword=jira%20tutorial&matchtype=e&network=g&placement=&ds_kids=p73335842418&ds_e=GOOGLE&ds_eid=700000001558501&ds_e1=GOOGLE&gad_source=1&gclid=CjwKCAjwps-zBhAiEiwALwsVYRs4TZ7L9AsYQBEVcCY2Nt2lcVUw0supIrtWWqRrHHAdi57x3EVpEhoCjVoQAvD_BwE&gclsrc=aw.ds)
+- [Jira overview](https://www.youtube.com/watch?v=fiWaMGCMyk8)
